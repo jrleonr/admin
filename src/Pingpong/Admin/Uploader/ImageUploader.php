@@ -11,7 +11,7 @@ class ImageUploader
     /**
      * @var string
      */
-    protected $ext = '.png';
+    protected $ext = '.jpg';
 
     /**
      * @param $ext

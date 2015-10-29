@@ -10,7 +10,7 @@
 	@else
 	{!! Form::open(['files' => true, 'route' => 'admin.articles.store']) !!}
 	@endif
-@endif
+@endif	
 	<div class="form-group">
 		{!! Form::label('title', 'Title:') !!}
 		{!! Form::text('title', null, ['class' => 'form-control']) !!}
@@ -52,11 +52,25 @@
 	</div>
 {!! Form::close() !!}
 
+
+<div class="">
+	<h3>{{ trans('common.photos') }}</h3>
+	@include('admin::images._menuPhotos')
+	<div class="col-sm-11 col-sm-push-1">
+	@include('admin::images._list', ['images' => []])
+	</div>
+	<div class="clearfix"></div>
+</div>
+   
+
 @section('script')
 	
 	{!! script('vendor/ckeditor/ckeditor.js') !!}
 	{!! script('vendor/ckfinder/ckfinder.js') !!}
-	
+	{!! script('js/upload.js') !!}
+
+    @include('admin::images._js')
+
 	<script type="text/javascript">
 		var prefix = '{!! asset(option("ckfinder.prefix")) !!}';
 		CKEDITOR.editorConfig = function( config ) {

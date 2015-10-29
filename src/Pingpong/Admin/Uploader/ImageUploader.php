@@ -74,6 +74,7 @@ class ImageUploader
         return $this;
     }
 
+
     public function getDestinationDirectory()
     {
         return dirname($this->getDestinationFile());
@@ -96,7 +97,45 @@ class ImageUploader
 
         $this->image->save($this->getDestinationFile());
 
+        $this->resize($path, $this->filename);
+
         return $this->filename;
+    }
+
+    /**
+    *
+    **/
+    public function resize($path, $filename)
+    {
+
+        $this->createDirectories($path);
+
+        $image = $this->image;
+
+        foreach(config('admin.image.resize') AS $size)
+        {
+            $image->resize(null,$size, function ($c)
+            {
+                $c->aspectRatio();
+            })->save($path . "/$size/{$filename}");
+        }
+
+        $image = $this->image;
+
+        foreach(config('admin.image.cut') AS $width => $height)
+        {
+            $image->fit($width,$height)->save($path ."/{$height}/{$filename}");
+
+        }
+
+        $image = $this->image;
+
+        foreach(config('admin.image.fit') AS $size)
+        {
+            $image->fit($size)->save($path ."/{$size}/{$filename}");
+
+        }
+
     }
 
     /**
@@ -105,5 +144,22 @@ class ImageUploader
     public function getFilename()
     {
         return $this->filename;
+    }
+
+    /**
+    * Create Directories
+    *
+    * 
+    */
+    public function createDirectories($path)
+    {
+        foreach(array_merge(config('admin.image.resize'),config('admin.image.fit'),config('admin.image.cut')) AS $dir)
+        {
+            if (!File::exists($path .'/'. $dir )) 
+            {
+
+                File::makeDirectory($path .'/'. $dir , 0777, true);
+            }
+        }
     }
 }

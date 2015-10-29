@@ -1,0 +1,71 @@
+
+#photoUpload 
+{
+  margin-top: 30px;
+}
+
+#photoUpload .h3 
+{
+  margin: 5px 0 7px 0;
+  font-size: 22px;
+}
+#photoUpload p 
+{
+  margin-bottom: 10px;
+}
+
+#menuPhotos 
+{
+  background: none repeat scroll 0 0 #fcfcfc;
+  border-bottom: 1px solid #e3e3e3;
+  margin: -10px 0 20px 0;
+  padding: 24px 30px;
+}
+
+.photo, .photoPending 
+{
+  max-width: 250px;
+  margin: 0 6px 10px 0;
+  padding: 0;
+  float: left;
+  position: relative;
+}
+
+.photo .delete, .photoPending .delete
+{
+  display: none;
+  position: absolute;
+  top: 6px;
+  left: 124px;
+  font-size: 13px;
+  height: 20px;
+  line-height: normal;
+  padding: 0 5px;
+  opacity:0.8;
+  filter:alpha(opacity=80);
+}
+
+.photoPending
+{
+  font-size: 12px;
+  height: 150px;
+  width: 150px;
+  border: 1px solid #ddd;
+}
+
+.photoPending .loadingPhoto
+{
+  color: #aaaaaa;
+  font-size: 30px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+.photoPending .uploading
+{
+  text-align: center;
+  color: #aaaaaa;
+  margin-top: 5px;
+}
+
+

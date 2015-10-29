@@ -96,15 +96,13 @@ class ArticlesController extends BaseController
             // upload image
             $this->uploader->upload('image')->save('images/articles');
 
-            $data['image'] = $this->uploader->getFilename();
+            $data['name'] = $this->uploader->getFilename();
         }
 
         $data['user_id'] = \Auth::id();
-        $data['slug'] = Str::slug($data['title']);
 
         $this->repository->create($data);
 
-        return $this->redirect(isOnPages() ? 'pages.index' : 'articles.index');
     }
 
     /**

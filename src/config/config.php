@@ -36,4 +36,12 @@ return [
         'model' => 'Pingpong\Admin\Entities\Category',
         'perpage' => 10
     ],
+    'image' => [
+        'model' => 'Pingpong\Admin\Entities\Image',
+        'perpage' => 40,
+        'resize' => ['720','480'],
+        'fit' => ['263','150'],
+        'cut' => [ '534' => '400' ]
+
+    ]
 ];

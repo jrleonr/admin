@@ -31,6 +31,30 @@ Route::group(['prefix' => config('admin.prefix', 'admin'), 'namespace' => 'Pingp
                 'destroy' => 'admin.articles.destroy',
             ],
         ]);
+
+        Route::resource('images', 'ImagesController', [
+            'except' => 'show',
+            'names' => [
+                'store' => 'admin.images.store',
+                'show' => 'admin.images.show',
+                'put' => 'admin.images.update',
+                'edit' => 'admin.images.edit',
+                'delete' => 'admin.images.destroy',
+            ],
+        ]);
+
+        Route::resource('articles', 'ArticlesController', [
+            'except' => 'show',
+            'names' => [
+                'index' => 'admin.articles.index',
+                'create' => 'admin.articles.create',
+                'store' => 'admin.articles.store',
+                'show' => 'admin.articles.show',
+                'update' => 'admin.articles.update',
+                'edit' => 'admin.articles.edit',
+                'destroy' => 'admin.articles.destroy',
+            ],
+        ]);
         Route::resource('pages', 'ArticlesController', [
             'except' => 'show',
             'names' => [

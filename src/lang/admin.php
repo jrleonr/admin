@@ -21,5 +21,8 @@ return [
 		'roles' => 'Roles',
 		'permissions' => 'Permissions',
 		'categories' => 'Categories'
+	],
+	'common' => [
+		'photos' => 'Photos'
 	]
 ];

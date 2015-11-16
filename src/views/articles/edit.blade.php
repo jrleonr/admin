@@ -10,12 +10,13 @@
 		<small>{!! link_to_route('admin.articles.index', 'Back') !!}</small>
 		@endif
 	</h1>
+	@include('admin::images._menuPhotos')
 @stop
 
 @section('content')
 
-	<div>
-		@include('admin::articles.form', array('model' => $article))
-	</div>
+	
+	@include('admin::articles.form', array('model' => $article, 'images' => $images))
+	
 
 @stop

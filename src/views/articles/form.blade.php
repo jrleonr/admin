@@ -1,3 +1,4 @@
+<div class="col-sm-8">
 @if(isOnPages())
 	@if(isset($model))
 	{!! Form::model($model, ['method' => 'PUT', 'files' => true, 'route' => ['admin.pages.update', $model->id]]) !!}
@@ -10,7 +11,7 @@
 	@else
 	{!! Form::open(['files' => true, 'route' => 'admin.articles.store']) !!}
 	@endif
-@endif
+@endif	
 	<div class="form-group">
 		{!! Form::label('title', 'Title:') !!}
 		{!! Form::text('title', null, ['class' => 'form-control']) !!}
@@ -32,43 +33,36 @@
 	@endif
 	<div class="form-group">
 		{!! Form::label('body', 'Body:') !!}
-		{!! Form::textarea('body', null, ['class' => 'form-control', 'id' => 'ckeditor']) !!}
+		{!! Form::textarea('body', null, ['class' => 'form-control', 'id' => 'editor']) !!}
 		{!! $errors->first('body', '<div class="text-danger">:message</div>') !!}
 	</div>
-	<div class="form-group">
-		{!! Form::label('image', 'Image:') !!}
-		{!! Form::file('image', ['class' => 'form-control']) !!}
-		{!! $errors->first('image', '<div class="text-danger">:message</div>') !!}
-	</div>
-	@if(isset($model))
-	<div class="form-group">
-		@if($model->image)
-		<img class="img-responsive" src="{!! asset('images/articles/' . $model->image) !!}">
-		@endif
-	</div>
-	@endif
 	<div class="form-group">
 		{!! Form::submit(isset($model) ? 'Update' : 'Save', ['class' => 'btn btn-primary']) !!}
 	</div>
 {!! Form::close() !!}
+</div>
+
+<div class="col-sm-4">
+	@if(isset($model))
+		@include('admin::images._list', ['images' => $images])
+	@endif
+</div>
+
+@section('style')   
+	{!! style('vendor/summernote/summernote.css') !!}
+@stop
 
 @section('script')
 	
 	{!! script('vendor/ckeditor/ckeditor.js') !!}
-	{!! script('vendor/ckfinder/ckfinder.js') !!}
-	
-	<script type="text/javascript">
-		var prefix = '{!! asset(option("ckfinder.prefix")) !!}';
-		CKEDITOR.editorConfig = function( config ) {
-		   config.filebrowserBrowseUrl = prefix + '/vendor/ckfinder/ckfinder.html';
-		   config.filebrowserImageBrowseUrl = prefix + '/vendor/ckfinder/ckfinder.html?type=Images';
-		   config.filebrowserFlashBrowseUrl = prefix + '/vendor/ckfinder/ckfinder.html?type=Flash';
-		   config.filebrowserUploadUrl = prefix + '/vendor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';
-		   config.filebrowserImageUploadUrl = prefix + '/vendor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images';
-		   config.filebrowserFlashUploadUrl = prefix + '/vendor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash';
-		};
 
-		var editor = CKEDITOR.replace( 'ckeditor' );
-		CKFinder.setupCKEditor( editor, prefix + '/vendor/ckfinder/') ;
+	@if(isset($model))
+		{!! script('js/upload.js') !!}
+    	@include('admin::images._js')
+    @endif
+
+	<script type="text/javascript">
+		CKEDITOR.replace( 'editor' );
+		CKEDITOR.config.allowedContent = true;
 	</script>
 @stop

@@ -53,6 +53,11 @@ class EloquentArticleRepository implements ArticleRepository
         return $this->getArticle()->find($id);
     }
 
+    public function findBySlug($slug)
+    {
+        return $this->getArticle()->bySlug($slug);
+    }
+
     public function findBy($key, $value, $operator = '=')
     {
         return $this->getArticle()->where($key, $operator, $value)->paginate($this->perPage());

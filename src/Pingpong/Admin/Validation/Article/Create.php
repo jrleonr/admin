@@ -10,7 +10,7 @@ class Create extends Validator
         'title' => 'required',
         'slug' => 'required|unique:articles,slug',
         'body' => 'required',
-        'image' => 'required|image',
+        //'image' => 'required|image',
     ];
 
     public function rules()

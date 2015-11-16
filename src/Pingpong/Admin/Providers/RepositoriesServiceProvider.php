@@ -15,6 +15,7 @@ class RepositoriesServiceProvider extends ServiceProvider
 
     protected $entities = [
         'User',
+        'Image',
         'Article',
         'Page',
         'Category',
@@ -37,6 +38,14 @@ class RepositoriesServiceProvider extends ServiceProvider
         $this->app->bind(
             'Pingpong\Admin\Repositories\Articles\ArticleRepository',
             'Pingpong\Admin\Repositories\Articles\EloquentArticleRepository'
+        );
+    }
+
+    protected function bindImageRepository()
+    {
+        $this->app->bind(
+            'Pingpong\Admin\Repositories\Images\ImageRepository',
+            'Pingpong\Admin\Repositories\Images\EloquentImageRepository'
         );
     }
 

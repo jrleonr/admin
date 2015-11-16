@@ -27,6 +27,7 @@ class ArticlesController extends BaseController
         $this->uploader = $uploader;
 
         $this->repository = $this->getRepository();
+
     }
 
     /**
@@ -88,21 +89,16 @@ class ArticlesController extends BaseController
      */
     public function store(Create $request)
     {
+
         $data = $request->all();
 
         unset($data['image']);
-
-        if (\Input::hasFile('image')) {
-            // upload image
-            $this->uploader->upload('image')->save('images/articles');
-
-            $data['name'] = $this->uploader->getFilename();
-        }
 
         $data['user_id'] = \Auth::id();
 
         $this->repository->create($data);
 
+        return $this->redirect(isOnPages() ? 'pages.index' : 'articles.index');
     }
 
     /**
@@ -134,8 +130,9 @@ class ArticlesController extends BaseController
     {
         try {
             $article = $this->repository->findById($id);
+            $images = $this->uploader->getUrls($article->images->all(), '150');
 
-            return $this->view('articles.edit', compact('article'));
+            return $this->view('articles.edit', compact('article', 'images'));
         } catch (ModelNotFoundException $e) {
             return $this->redirectNotFound();
         }
@@ -154,17 +151,8 @@ class ArticlesController extends BaseController
             $article = $this->repository->findById($id);
 
             $data = $request->all();
-
-            unset($data['image']);
+            
             unset($data['type']);
-
-            if (\Input::hasFile('image')) {
-                $article->deleteImage();
-
-                $this->uploader->upload('image')->save('images/articles');
-
-                $data['image'] = $this->uploader->getFilename();
-            }
 
             $data['user_id'] = \Auth::id();
             $data['slug'] = Str::slug($data['title']);

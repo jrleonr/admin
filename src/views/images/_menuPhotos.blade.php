@@ -1,8 +1,8 @@
-<div class="col-sm-12" id="menuPhotos">
+<div id="menuPhotos">
     <div id="upload-button" class="pull-left">
         <div class="pull-left">
             <span id="upload-button" class="btn btn-primary fileinput-button">
-                <span>{{ trans('edit.addPhoto') }}</span>
+                {!! Form::label('image', 'SUBIR FOTO') !!}
                 <input id="fileupload" type="file" name="image" data-url="{{ route('admin.images.store') }}" >
             </span>
         </div>

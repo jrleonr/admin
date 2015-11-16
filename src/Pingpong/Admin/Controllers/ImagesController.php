@@ -5,6 +5,7 @@ namespace Pingpong\Admin\Controllers;
 use Illuminate\Http\Request;
 use Pingpong\Admin\Uploader\ImageUploader;
 use Pingpong\Admin\Repositories\Images\ImageRepository;
+use Pingpong\Admin\Repositories\Articles\ArticleRepository;
 
 class ImagesController extends BaseController
 {
@@ -19,7 +20,7 @@ class ImagesController extends BaseController
     }
 
 
-    public function store(Request $request)
+    public function store(Request $request, ArticleRepository $article)
     {
         $data = $request->all();
 
@@ -34,10 +35,18 @@ class ImagesController extends BaseController
 
             $data['user_id'] = \Auth::id();
 
+            $data['post_id'] = $data['article_id'];
+
             $image = $this->repository->create($data);
 
+            $article = $article->findById($data['article_id']);
 
-            return ['id' => $image->id, 'url' => asset('images/articles/' . $data['url'] ), 'main' => $image->main];
+            if (!isset($article->image)) {
+                $article->update(['image' => $data['url']]);
+            }
+
+
+            return ['id' => $image->id, 'url' => asset('images/articles/150/' . $data['url']), 'main' => $image->main];
         }
     }
 
@@ -45,16 +54,18 @@ class ImagesController extends BaseController
      * @param Request $request
      * @param Filesystem $filesystem
      */
-    public function destroy(Request $request, Images $image)
+    public function destroy(Request $request)
     {
         if ($request->ajax()) {
-            $image->delete($request->input('id'));
+            $this->uploader->delete($request->input('id'));
+            $this->repository->delete($request->input('id'));
+
         }
     }
 
     //name??
-    public function update(Request $request, Images $image)
+    public function update(Request $request)
     {
-        $image->setMain($request->input('id'));
+        $this->uploader->setMain($request->input('id'));
     }
 }

@@ -20,7 +20,7 @@ class EloquentImageRepository implements ImageRepository
 
     public function getImage()
     {
-        return $this->getModel()->onlyPost();
+        return $this->getModel();
     }
 
     public function allOrSearch($searchQuery = null)

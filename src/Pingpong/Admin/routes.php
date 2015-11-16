@@ -37,9 +37,9 @@ Route::group(['prefix' => config('admin.prefix', 'admin'), 'namespace' => 'Pingp
             'names' => [
                 'store' => 'admin.images.store',
                 'show' => 'admin.images.show',
-                'update' => 'admin.images.update',
+                'put' => 'admin.images.update',
                 'edit' => 'admin.images.edit',
-                'destroy' => 'admin.images.destroy',
+                'delete' => 'admin.images.destroy',
             ],
         ]);
 

@@ -14,8 +14,8 @@
 
 @section('content')
 
-	<div>
-		@include('admin::articles.form')
-	</div>
+	
+	@include('admin::articles.form')
+	
 
 @stop

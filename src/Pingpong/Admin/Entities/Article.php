@@ -52,6 +52,16 @@ class Article extends Model
     }
 
     /**
+     * Images
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function images()
+    {
+        return $this->hasMany(__NAMESPACE__.'\\Image','post_id');
+    }
+
+    /**
      * @param $query
      *
      * @return mixed
@@ -110,6 +120,17 @@ class Article extends Model
     public function scopeBySlugOrId($query, $id)
     {
         return $query->whereId($id)->orWhere('slug', '=', $id);
+    }
+
+    /**
+     * @param $query
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function scopeBySlug($query, $slug)
+    {
+        return $query->whereSlug($slug);
     }
 
     /**

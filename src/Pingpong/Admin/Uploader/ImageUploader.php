@@ -5,6 +5,8 @@ namespace Pingpong\Admin\Uploader;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
+use Pingpong\Admin\Entities\Image as Model;
+use Pingpong\Admin\Entities\Article;
 
 class ImageUploader
 {
@@ -12,6 +14,11 @@ class ImageUploader
      * @var string
      */
     protected $ext = '.jpg';
+
+    /**
+    * @var string
+    */
+    private $path = 'images/articles';
 
     /**
      * @param $ext
@@ -95,7 +102,7 @@ class ImageUploader
             File::makeDirectory($path, 0777, true);
         }
 
-        $this->image->save($this->getDestinationFile());
+        //$this->image->save($this->getDestinationFile());
 
         $this->resize($path, $this->filename);
 
@@ -138,6 +145,58 @@ class ImageUploader
 
     }
 
+
+    public function delete($id, $path = 'images/articles')
+    {
+        $user = \Auth::user();
+
+        $image = Model::whereRaw('id = ? and user_id = ?', [$id, $user->id])->firstOrFail();
+
+        foreach (array_merge(config('admin.image.resize'),config('admin.image.fit'),config('admin.image.cut')) AS $size)
+        {
+            \Storage::disk('local')->delete("{$path}/{$size}/{$image->url}");
+        }
+
+        $image->delete();
+
+
+        if($image->main)
+        {
+
+            $article = Article::where('id','=', $image->article_id )->firstOrFail();
+
+            if ($newMainImage = Image::where('post_id', '=', $image->article_id )->first() )
+            {
+                $newMainImage->main = 1;
+                $newMainImage->save();
+
+                $article->image = $newMainImage->url;
+
+            }
+            else
+            { 
+                $article->image = null;
+            }
+
+            $article->save();
+        }
+    }
+
+    public function setMain($id)
+    {
+        $image = Model::where('id','=', $id)->firstOrFail();
+
+        Model::where('post_id', '=', $image->post_id)->update(['main' => 0]);
+        $article = Article::where('id','=', $image->post_id )->firstOrFail();
+
+
+        $image->main = 1;
+        $image->save();
+
+        $article->image = $image->url;
+        $article->save();
+    }
+
     /**
      * @return mixed
      */
@@ -162,4 +221,34 @@ class ImageUploader
             }
         }
     }
+
+    public function getUrl($size, $name = null)
+    {
+        if(!$name)
+            return asset("img/unknown.jpg");
+
+        //return Config::get('filesystems.disks.s3.endpoint') . $size .'/'.$name;
+
+        return asset($this->path . '/'. $size .'/'.$name);
+    }
+
+    public function getUrls($images, $size, $user_id = null, $bigSize = '400', $medSize = '263', $smallSize = '150')
+    {
+
+        foreach($images as $image)
+        {
+            $image['bigUrl'] = self::getUrl($bigSize, $image['url']);
+            $image['medUrl'] = self::getUrl($medSize, $image['url']);
+            $image['smallUrl'] = self::getUrl($smallSize, $image['url']);
+
+            $image['url'] = self::getUrl($size, $image['url']);
+
+        }
+
+        if(empty($images))
+            $urls[]['url'] = self::getUrl($size);
+        
+        return $images;
+    }
+
 }

@@ -12,7 +12,7 @@ class Image extends Model
     /**
     * @var array
     **/
-    protected $fillable = ['name','url','main','user_id'];
+    protected $fillable = ['title','url','main','user_id', 'post_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

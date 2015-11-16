@@ -7,7 +7,7 @@ $(document).ready(function()
 $(function () {
     $('#fileupload').fileupload({
         dataType: 'json',
-        formData: {_token: '{{csrf_token()}}'},
+        formData: {article_id: {{$model->id}},_token: '{{csrf_token()}}'},
         start: function (e, data)
         {
             $("#photoUpload").addClass('hidden');
@@ -75,13 +75,18 @@ function setMain(id)
 
     $.ajax({
         type: "POST",
-        url: '{{ route('admin.images.store') }}',
+        url: '{{ route('admin.images.store') . '/' }}' + id,
         cache: false,
         data: {id: id, _method: 'PUT', _token: '{{csrf_token()}}'},
         success: function()
         {
         }
     });
+}
+
+function sendImageToEditor(img)
+{
+    CKEDITOR.instances.editor.insertHtml('<img class="img-responsive center-block" src="'+img+'" >');
 }
 
 function deletePhoto(id)
@@ -99,7 +104,7 @@ function deletePhoto(id)
 
     $.ajax({
         type: "POST",
-        url: '{{ route('admin.images.store')  }}',
+        url: '{{ route('admin.images.store') . '/' }}' + id,
         cache: false,
         data: {id: id, _method: 'DELETE', _token: '{{csrf_token()}}' },
         success: function(photo)
@@ -114,9 +119,11 @@ function set_hover()
 {
     $(".photo").hover(function (){
             $(this).find(".delete").css("display", "inline");
+            $(this).find(".sendTo").css("display", "inline");
             $(this).find(".star-default").css("display", "block");
         },function(){
             $(this).find(".delete").css("display", "none");
+            $(this).find(".sendTo").css("display", "none");
             $(this).find(".star-default").css("display", "none");
         }
     );

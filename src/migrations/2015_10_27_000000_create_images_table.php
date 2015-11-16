@@ -24,6 +24,9 @@ class CreateImagesTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
 
+            $table->integer('post_id')->unsigned()->index();
+            $table->foreign('post_id')->references('id')->on('articles');
+
             $table->timestamps();
 
 

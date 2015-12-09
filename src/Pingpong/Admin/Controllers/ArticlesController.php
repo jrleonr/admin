@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Pingpong\Admin\Uploader\ImageUploader;
 use Pingpong\Admin\Validation\Article\Create;
 use Pingpong\Admin\Validation\Article\Update;
+use Carbon\Carbon;
 
 class ArticlesController extends BaseController
 {
@@ -96,9 +97,9 @@ class ArticlesController extends BaseController
 
         $data['user_id'] = \Auth::id();
 
-        $this->repository->create($data);
+        $id = $this->repository->create($data);
 
-        return $this->redirect(isOnPages() ? 'pages.index' : 'articles.index');
+        return isOnPages() ? $this->redirect('pages.index') : redirect()->route('admin.articles.edit', $article->id);
     }
 
     /**
@@ -156,9 +157,11 @@ class ArticlesController extends BaseController
 
             $data['user_id'] = \Auth::id();
             $data['slug'] = Str::slug($data['title']);
+            $data['published_at'] = Carbon::now();
+
             $article->update($data);
 
-            return $this->redirect(isOnPages() ? 'pages.index' : 'articles.index');
+            return isOnPages() ? $this->redirect('pages.index') : redirect()->route('admin.articles.edit', $article->id);
         } catch (ModelNotFoundException $e) {
             return $this->redirectNotFound();
         }

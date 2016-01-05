@@ -31,7 +31,7 @@ $(function () {
                 var star = '<div class="star"><div class="star-default" onclick="setMain('+data.result.id+')"></div></div>';
 
 
-            var photo = '<div id='+data.result.id+' class="photo" ><img class="img-responsive" src="'+data.result.url+'">'+star+'<div onclick="deletePhoto('+data.result.id+')" type="submit" class="btn btn-danger delete">X</div></div>';
+            var photo = '<div id='+data.result.id+' class="photo" ><img class="img-responsive" src="'+data.result.url+'">'+star+'<div onclick="deletePhoto('+data.result.id+')" type="submit" class="btn btn-danger delete">X</div><div onclick=\'sendImageToEditor("'+data.result.url+'")\' class="btn sendTo sendToM">INSERTAR</div></div>';
 
             if( $("#images .photo:eq(0)").length )
                 $( "#images .photo:eq(0)" ).after(photo);

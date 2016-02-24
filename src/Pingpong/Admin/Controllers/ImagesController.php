@@ -46,7 +46,7 @@ class ImagesController extends BaseController
             }
 
 
-            return ['id' => $image->id, 'url' => asset('images/articles/150/' . $data['url']), 'main' => $image->main];
+            return ['id' => $image->id, 'url' => asset('images/articles/150/' . $data['url']), 'bigUrl' => asset('images/articles/400/' . $data['url']), 'main' => $image->main];
         }
     }
 
